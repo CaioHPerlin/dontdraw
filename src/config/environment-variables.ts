@@ -1,10 +1,15 @@
 import { plainToInstance } from "class-transformer";
-import { IsNotEmpty, IsString, validateSync } from "class-validator";
+import { IsInt, IsNotEmpty, IsString, Max, Min, validateSync } from "class-validator";
 
-class EnvironmentVariables {
+export class EnvironmentVariables {
 	@IsString()
 	@IsNotEmpty()
 	DATABASE_URL: string;
+
+	@IsInt()
+	@Min(1)
+	@Max(65535)
+	PORT: number;
 }
 
 export function validateEnvironmentVariables(
