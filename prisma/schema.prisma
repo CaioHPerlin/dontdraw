@@ -8,3 +8,10 @@ generator client {
   moduleFormat  = "cjs"
 }
 
+model Room {
+  id          Int       @default(autoincrement()) @id
+  slug        String    @unique
+  strokes     Json      @default("[]")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
