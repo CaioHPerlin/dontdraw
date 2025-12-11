@@ -24,6 +24,6 @@ import { WsJwtGuard } from "./guards/ws-jwt.guard";
 	],
 	controllers: [AuthController],
 	providers: [AuthService, LocalStrategy, JwtStrategy, WsJwtGuard],
-	exports: [WsJwtGuard],
+	exports: [WsJwtGuard, JwtModule],
 })
 export class AuthModule {}
