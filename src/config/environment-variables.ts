@@ -1,4 +1,4 @@
-import { plainToInstance } from "class-transformer";
+import { plainToInstance, Transform } from "class-transformer";
 import {
 	IsBoolean,
 	IsInt,
@@ -19,8 +19,17 @@ export class EnvironmentVariables {
 	@Max(65535)
 	PORT: number;
 
+	@Transform(({ value }) => value === true || value === "true")
 	@IsBoolean()
 	PERFORMANCE_WS: boolean;
+
+	@IsString()
+	@IsNotEmpty()
+	JWT_SECRET: string;
+
+	@IsString()
+	@IsNotEmpty()
+	JWT_EXPIRES_IN: string;
 }
 
 export function validateEnvironmentVariables(
