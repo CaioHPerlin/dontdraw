@@ -3,6 +3,7 @@ let currentRoom = null;
 let canvas = null;
 let ctx = null;
 let isDrawing = false;
+let socket = null;
 
 window.addEventListener("DOMContentLoaded", async () => {
 	currentRoom = getCurrentRoomSlug();
@@ -16,7 +17,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 function initializeWebSocket() {
-	const socket = io();
+	socket = io();
 
 	socket.on("connect", () => {
 		console.log("Connected to WebSocket server");
@@ -25,6 +26,11 @@ function initializeWebSocket() {
 
 	socket.on("disconnect", () => {
 		console.log("Disconnected from WebSocket");
+	});
+
+	// Listen for draw events from other users
+	socket.on("draw", (data) => {
+		drawFromRemote(data);
 	});
 }
 
@@ -105,11 +111,60 @@ function draw(e) {
 
 	ctx.lineTo(x, y);
 	ctx.stroke();
+
+	// Start a new path for each point to prevent unwanted connections
+	ctx.beginPath();
+	ctx.moveTo(x, y);
+
+	// Emit draw event to other users
+	if (socket) {
+		socket.emit("draw", {
+			slug: currentRoom,
+			x,
+			y,
+			color,
+			brushSize,
+			type: "draw",
+		});
+	}
 }
 
 function stopDrawing() {
 	if (isDrawing) {
 		isDrawing = false;
+		ctx.beginPath();
+	}
+
+	// Emit end event to other users
+	if (socket) {
+		socket.emit("draw", {
+			slug: currentRoom,
+			x: 0,
+			y: 0,
+			color: "#ffffff",
+			brushSize: 1,
+			type: "end",
+		});
+	}
+}
+
+function drawFromRemote(data) {
+	const { x, y, color, brushSize, type } = data;
+
+	if (type === "start") {
+		ctx.beginPath();
+		ctx.moveTo(x, y);
+		ctx.strokeStyle = color;
+		ctx.lineWidth = brushSize;
+	} else if (type === "draw") {
+		ctx.strokeStyle = color;
+		ctx.lineWidth = brushSize;
+		ctx.lineTo(x, y);
+		ctx.stroke();
+		// Start a new path for each point to prevent unwanted connections
+		ctx.beginPath();
+		ctx.moveTo(x, y);
+	} else if (type === "end") {
 		ctx.beginPath();
 	}
 }
