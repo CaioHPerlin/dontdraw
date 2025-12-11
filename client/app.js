@@ -5,9 +5,7 @@ let ctx = null;
 let isDrawing = false;
 
 window.addEventListener("DOMContentLoaded", async () => {
-	currentRoom = getCurrentRoom();
-	const roomData = await getOrCreateRoom(currentRoom);
-	console.log({ roomData });
+	currentRoom = getCurrentRoomSlug();
 
 	initializeCanvas();
 	initializeEventListeners();
@@ -50,7 +48,7 @@ function initializeEventListeners() {
 	canvasElement.addEventListener("touchend", stopDrawing);
 }
 
-function getCurrentRoom() {
+function getCurrentRoomSlug() {
 	const path = window.location.pathname;
 
 	if (path === "/" || path === "") {
@@ -69,17 +67,12 @@ function getCurrentRoom() {
 	return pathWithoutLeadingSlash.substring(0, firstSlashIndex);
 }
 
-async function getOrCreateRoom(slug) {
-	const response = await fetch(`${API_URL}/rooms/${slug}`);
-	return response.json();
-}
-
 function initializeCanvas() {
 	canvas = document.getElementById("drawing-canvas");
-	ctx = canvas.getContext("2d");
+	ctx = canvas.getContext("2d", { willReadFrequently: false });
 
-	canvas.width = 4096;
-	canvas.height = 4096;
+	canvas.width = 3072;
+	canvas.height = 3072;
 
 	ctx.lineCap = "round";
 	ctx.lineJoin = "round";

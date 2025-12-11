@@ -7,6 +7,7 @@ import {
 	WebSocketGateway,
 } from "@nestjs/websockets";
 import { Socket } from "socket.io";
+import { RoomsService } from "./rooms.service";
 
 @WebSocketGateway({
 	cors: {
@@ -14,6 +15,8 @@ import { Socket } from "socket.io";
 	},
 })
 export class RoomsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+	constructor(private readonly roomsService: RoomsService) {}
+
 	handleConnection(client: Socket) {
 		console.log(`Client connected: ${client.id}`);
 	}
@@ -23,7 +26,11 @@ export class RoomsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	@SubscribeMessage("joinRoom")
-	handleJoinRoom(@MessageBody("slug") slug: string, @ConnectedSocket() client: Socket) {
-		console.log(`Client ${client.id} joined room: ${slug}`);
+	async handleJoinRoom(
+		@MessageBody("slug") slug: string,
+		@ConnectedSocket() client: Socket,
+	) {
+		console.log(`Client ${client.id} attempting to join room: ${slug}`);
+		await this.roomsService.findOrCreateRoomBySlug(slug);
 	}
 }
