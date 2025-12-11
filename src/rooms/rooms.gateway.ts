@@ -6,10 +6,13 @@ import {
 	SubscribeMessage,
 	WebSocketGateway,
 } from "@nestjs/websockets";
+import { UseInterceptors } from "@nestjs/common";
 import { Socket } from "socket.io";
 import { RoomsService } from "./rooms.service";
 import type { Stroke } from "./dto/stroke.dto";
+import { WebSocketLoggingInterceptor } from "src/common/interceptors/websocket-logging.interceptor";
 
+@UseInterceptors(WebSocketLoggingInterceptor)
 @WebSocketGateway({
 	cors: {
 		origin: "*",
