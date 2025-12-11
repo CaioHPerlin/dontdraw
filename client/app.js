@@ -11,10 +11,24 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 	initializeCanvas();
 	initializeEventListeners();
+	initializeWebSocket();
 
 	// Update room name in header
 	document.getElementById("current-room-name").textContent = currentRoom;
 });
+
+function initializeWebSocket() {
+	const socket = io();
+
+	socket.on("connect", () => {
+		console.log("Connected to WebSocket server");
+		socket.emit("joinRoom", { slug: currentRoom });
+	});
+
+	socket.on("disconnect", () => {
+		console.log("Disconnected from WebSocket");
+	});
+}
 
 function initializeEventListeners() {
 	// Canvas controls
@@ -48,7 +62,6 @@ function getCurrentRoom() {
 	const firstSlashIndex = pathWithoutLeadingSlash.indexOf("/");
 
 	if (firstSlashIndex === -1) {
-		// No additional slashes, entire path is the room slug
 		return pathWithoutLeadingSlash;
 	}
 
