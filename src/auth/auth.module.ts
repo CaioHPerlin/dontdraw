@@ -8,6 +8,7 @@ import { LocalStrategy } from "./strategies/local.strategy";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { AuthController } from "./auth.controller";
 import { EnvironmentVariables } from "src/config/environment-variables";
+import { WsJwtGuard } from "./guards/ws-jwt.guard";
 
 @Module({
 	imports: [
@@ -22,7 +23,7 @@ import { EnvironmentVariables } from "src/config/environment-variables";
 		}),
 	],
 	controllers: [AuthController],
-	providers: [AuthService, LocalStrategy, JwtStrategy],
-	exports: [AuthService],
+	providers: [AuthService, LocalStrategy, JwtStrategy, WsJwtGuard],
+	exports: [WsJwtGuard],
 })
 export class AuthModule {}

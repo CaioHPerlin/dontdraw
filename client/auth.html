@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DontDraw - Auth</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="auth-app">
+        <div class="auth-container">
+            <h1>DontDraw</h1>
+            <p class="subtitle">Sign in to start drawing</p>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <h2>Login</h2>
+                <form id="login">
+                    <input type="email" id="login-email" placeholder="Email" required autocomplete="email" />
+                    <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password" />
+                    <button type="submit">Login</button>
+                </form>
+                <p class="form-switch">
+                    Don't have an account? <a href="#" id="show-register">Register</a>
+                </p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="auth-form hidden">
+                <h2>Register</h2>
+                <form id="register">
+                    <input type="email" id="register-email" placeholder="Email" required autocomplete="email" />
+                    <input type="password" id="register-password" placeholder="Password (min 6 chars)" required autocomplete="new-password" />
+                    <button type="submit">Register</button>
+                </form>
+                <p class="form-switch">
+                    Already have an account? <a href="#" id="show-login">Login</a>
+                </p>
+            </div>
+
+            <div id="auth-error" class="error-message hidden"></div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+
+</html>

@@ -7,22 +7,43 @@ let hasDrawn = false;
 let socket = null;
 
 window.addEventListener("DOMContentLoaded", async () => {
+	// Check authentication
+	const token = localStorage.getItem("access_token");
+	if (!token) {
+		sessionStorage.setItem("redirect_after_auth", window.location.pathname);
+		window.location.href = "/auth.html";
+		return;
+	}
+
 	currentRoomSlug = getCurrentRoomSlug();
 
 	initializeCanvas();
 	initializeEventListeners();
-	initializeWebSocket();
+	initializeWebSocket(token);
 
 	// Update room name in header
 	document.getElementById("current-room-name").textContent = currentRoomSlug;
 });
 
-function initializeWebSocket() {
-	socket = io();
+function initializeWebSocket(token) {
+	socket = io({
+		auth: {
+			token: token,
+		},
+	});
 
 	socket.on("connect", () => {
 		console.log("Connected to WebSocket server");
 		socket.emit("joinRoom", { slug: currentRoomSlug });
+	});
+
+	socket.on("connect_error", (error) => {
+		console.error("WebSocket connection error:", error);
+		if (error.message.includes("Unauthorized") || error.message.includes("jwt")) {
+			localStorage.removeItem("access_token");
+			sessionStorage.setItem("redirect_after_auth", window.location.pathname);
+			window.location.href = "/auth.html";
+		}
 	});
 
 	socket.on("joinedRoom", (data) => {
@@ -46,7 +67,8 @@ function initializeWebSocket() {
 function initializeEventListeners() {
 	// Canvas controls
 	document.getElementById("leave-room-btn").addEventListener("click", () => {
-		window.location.href = "/";
+		localStorage.removeItem("access_token");
+		window.location.href = "/auth.html";
 	});
 	document
 		.getElementById("clear-canvas-btn")

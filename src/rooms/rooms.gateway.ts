@@ -6,12 +6,14 @@ import {
 	SubscribeMessage,
 	WebSocketGateway,
 } from "@nestjs/websockets";
-import { UseInterceptors } from "@nestjs/common";
+import { UseGuards, UseInterceptors } from "@nestjs/common";
 import { Socket } from "socket.io";
 import { RoomsService } from "./rooms.service";
 import type { Stroke } from "./dto/stroke.dto";
 import { WebSocketPerformanceInterceptor } from "src/common/interceptors/websocket-performance.interceptor";
+import { WsJwtGuard } from "src/auth/guards/ws-jwt.guard";
 
+@UseGuards(WsJwtGuard)
 @UseInterceptors(WebSocketPerformanceInterceptor)
 @WebSocketGateway({
 	cors: {
