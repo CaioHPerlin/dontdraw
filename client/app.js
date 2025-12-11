@@ -1,19 +1,19 @@
 const API_URL = "/api";
-let currentRoom = null;
+let currentRoomSlug = null;
 let canvas = null;
 let ctx = null;
 let isDrawing = false;
 let socket = null;
 
 window.addEventListener("DOMContentLoaded", async () => {
-	currentRoom = getCurrentRoomSlug();
+	currentRoomSlug = getCurrentRoomSlug();
 
 	initializeCanvas();
 	initializeEventListeners();
 	initializeWebSocket();
 
 	// Update room name in header
-	document.getElementById("current-room-name").textContent = currentRoom;
+	document.getElementById("current-room-name").textContent = currentRoomSlug;
 });
 
 function initializeWebSocket() {
@@ -21,7 +21,11 @@ function initializeWebSocket() {
 
 	socket.on("connect", () => {
 		console.log("Connected to WebSocket server");
-		socket.emit("joinRoom", { slug: currentRoom });
+		socket.emit("joinRoom", { slug: currentRoomSlug });
+	});
+
+	socket.on("joinedRoom", (data) => {
+		loadSavedStrokes(data);
 	});
 
 	socket.on("disconnect", () => {
@@ -119,7 +123,7 @@ function draw(e) {
 	// Emit draw event to other users
 	if (socket) {
 		socket.emit("draw", {
-			slug: currentRoom,
+			slug: currentRoomSlug,
 			x,
 			y,
 			color,
@@ -138,7 +142,7 @@ function stopDrawing() {
 	// Emit end event to other users
 	if (socket) {
 		socket.emit("draw", {
-			slug: currentRoom,
+			slug: currentRoomSlug,
 			x: 0,
 			y: 0,
 			color: "#ffffff",
@@ -166,6 +170,20 @@ function drawFromRemote(data) {
 		ctx.moveTo(x, y);
 	} else if (type === "end") {
 		ctx.beginPath();
+	}
+}
+
+async function loadSavedStrokes(roomData) {
+	if (
+		!roomData.strokes ||
+		!Array.isArray(roomData.strokes) ||
+		roomData.strokes.length === 0
+	) {
+		return;
+	}
+
+	for (const stroke of roomData.strokes) {
+		drawFromRemote(stroke);
 	}
 }
 

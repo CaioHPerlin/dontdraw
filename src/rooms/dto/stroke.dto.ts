@@ -1,4 +1,4 @@
-export class Stroke {
+export interface Stroke {
 	slug: string;
 	x: number;
 	y: number;

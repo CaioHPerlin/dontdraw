@@ -1,6 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Room } from "src/prisma/generated/client";
 import { PrismaService } from "src/prisma/prisma.service";
+import { Stroke } from "./dto/stroke.dto";
 
 @Injectable()
 export class RoomsService {
@@ -28,5 +29,18 @@ export class RoomsService {
 		}
 
 		return { room, created };
+	}
+
+	async saveStrokeToRoom(slug: string, stroke: Stroke): Promise<void> {
+		const room = await this.findRoomBySlug(slug);
+		if (!room) return;
+
+		const strokes = Array.isArray(room.strokes) ? room.strokes : [];
+		strokes.push(stroke as any);
+
+		await this.prismaService.room.update({
+			where: { slug },
+			data: { strokes },
+		});
 	}
 }
