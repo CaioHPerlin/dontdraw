@@ -45,4 +45,13 @@ export class RoomsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		client.to(data.slug).emit("draw", data);
 		this.roomsService.saveStrokeToRoom(data.slug, data);
 	}
+
+	@SubscribeMessage("clearCanvas")
+	async handleClearCanvas(
+		@MessageBody("slug") slug: string,
+		@ConnectedSocket() client: Socket,
+	) {
+		client.to(slug).emit("clearCanvas");
+		this.roomsService.clearStrokesInRoom(slug);
+	}
 }

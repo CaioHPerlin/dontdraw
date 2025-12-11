@@ -43,4 +43,14 @@ export class RoomsService {
 			data: { strokes },
 		});
 	}
+
+	async clearStrokesInRoom(slug: string): Promise<void> {
+		const room = await this.findRoomBySlug(slug);
+		if (!room) return;
+
+		await this.prismaService.room.update({
+			where: { slug },
+			data: { strokes: [] },
+		});
+	}
 }

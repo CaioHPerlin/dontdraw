@@ -37,6 +37,10 @@ function initializeWebSocket() {
 	socket.on("draw", (data) => {
 		drawFromRemote(data);
 	});
+
+	socket.on("clearCanvas", () => {
+		clearCanvas();
+	});
 }
 
 function initializeEventListeners() {
@@ -44,7 +48,9 @@ function initializeEventListeners() {
 	document.getElementById("leave-room-btn").addEventListener("click", () => {
 		window.location.href = "/";
 	});
-	document.getElementById("clear-canvas-btn").addEventListener("click", clearCanvas);
+	document
+		.getElementById("clear-canvas-btn")
+		.addEventListener("click", handleClearCanvas);
 
 	// Canvas drawing
 	const canvasElement = document.getElementById("drawing-canvas");
@@ -196,6 +202,11 @@ function clearCanvas() {
 	if (!ctx || !canvas) return;
 	ctx.fillStyle = "#0f1116";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function handleClearCanvas() {
+	socket.emit("clearCanvas", { slug: currentRoomSlug });
+	clearCanvas();
 }
 
 function handleTouchStart(e) {
