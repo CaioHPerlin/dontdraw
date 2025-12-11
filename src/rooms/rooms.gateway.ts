@@ -12,6 +12,7 @@ import { RoomsService } from "./rooms.service";
 import type { Stroke } from "./dto/stroke.dto";
 import { WebSocketPerformanceInterceptor } from "src/common/interceptors/websocket-performance.interceptor";
 import { WsJwtGuard } from "src/auth/guards/ws-jwt.guard";
+import { NormalizeSlugPipe } from "src/common/pipes/normalize-slug.pipe";
 
 @UseGuards(WsJwtGuard)
 @UseInterceptors(WebSocketPerformanceInterceptor)
@@ -33,7 +34,7 @@ export class RoomsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	@SubscribeMessage("joinRoom")
 	async handleJoinRoom(
-		@MessageBody("slug") slug: string,
+		@MessageBody("slug", new NormalizeSlugPipe()) slug: string,
 		@ConnectedSocket() client: Socket,
 	) {
 		const { room } = await this.roomsService.findOrCreateRoomBySlug(slug);
@@ -50,7 +51,7 @@ export class RoomsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	@SubscribeMessage("clearCanvas")
 	async handleClearCanvas(
-		@MessageBody("slug") slug: string,
+		@MessageBody("slug", new NormalizeSlugPipe()) slug: string,
 		@ConnectedSocket() client: Socket,
 	) {
 		client.to(slug).emit("clearCanvas");
