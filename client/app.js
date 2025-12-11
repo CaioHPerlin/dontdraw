@@ -6,6 +6,11 @@ let isDrawing = false;
 let hasDrawn = false;
 let socket = null;
 
+function normalizeSlug(slug) {
+	if (typeof slug !== "string") return slug;
+	return slug.trim().toLowerCase().replace(/\s+/g, "-");
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
 	// Check authentication
 	const token = localStorage.getItem("access_token");
@@ -22,7 +27,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 	initializeWebSocket(token);
 
 	// Update room name in header
-	document.getElementById("current-room-name").textContent = currentRoomSlug;
+	document.getElementById("current-room-name").textContent =
+		normalizeSlug(currentRoomSlug);
 });
 
 function initializeWebSocket(token) {
@@ -34,7 +40,7 @@ function initializeWebSocket(token) {
 
 	socket.on("connect", () => {
 		console.log("Connected to WebSocket server");
-		socket.emit("joinRoom", { slug: currentRoomSlug });
+		socket.emit("joinRoom", { slug: normalizeSlug(currentRoomSlug) });
 	});
 
 	socket.on("connect_error", (error) => {
@@ -155,7 +161,7 @@ function draw(e) {
 	// Emit draw event to other users
 	if (socket) {
 		socket.emit("draw", {
-			slug: currentRoomSlug,
+			slug: normalizeSlug(currentRoomSlug),
 			x,
 			y,
 			color,
@@ -174,7 +180,7 @@ function stopDrawing() {
 	// Emit end event to other users
 	if (hasDrawn && socket) {
 		socket.emit("draw", {
-			slug: currentRoomSlug,
+			slug: normalizeSlug(currentRoomSlug),
 			x: 0,
 			y: 0,
 			color: "#ffffff",
@@ -227,7 +233,7 @@ function clearCanvas() {
 }
 
 function handleClearCanvas() {
-	socket.emit("clearCanvas", { slug: currentRoomSlug });
+	socket.emit("clearCanvas", { slug: normalizeSlug(currentRoomSlug) });
 	clearCanvas();
 }
 
