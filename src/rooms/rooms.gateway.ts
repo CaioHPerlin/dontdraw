@@ -10,9 +10,9 @@ import { UseInterceptors } from "@nestjs/common";
 import { Socket } from "socket.io";
 import { RoomsService } from "./rooms.service";
 import type { Stroke } from "./dto/stroke.dto";
-import { WebSocketLoggingInterceptor } from "src/common/interceptors/websocket-logging.interceptor";
+import { WebSocketPerformanceInterceptor } from "src/common/interceptors/websocket-performance.interceptor";
 
-@UseInterceptors(WebSocketLoggingInterceptor)
+@UseInterceptors(WebSocketPerformanceInterceptor)
 @WebSocketGateway({
 	cors: {
 		origin: "*",

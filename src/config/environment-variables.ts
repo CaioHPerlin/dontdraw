@@ -1,5 +1,13 @@
 import { plainToInstance } from "class-transformer";
-import { IsInt, IsNotEmpty, IsString, Max, Min, validateSync } from "class-validator";
+import {
+	IsBoolean,
+	IsInt,
+	IsNotEmpty,
+	IsString,
+	Max,
+	Min,
+	validateSync,
+} from "class-validator";
 
 export class EnvironmentVariables {
 	@IsString()
@@ -10,6 +18,9 @@ export class EnvironmentVariables {
 	@Min(1)
 	@Max(65535)
 	PORT: number;
+
+	@IsBoolean()
+	PERFORMANCE_WS: boolean;
 }
 
 export function validateEnvironmentVariables(
