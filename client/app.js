@@ -3,6 +3,7 @@ let currentRoomSlug = null;
 let canvas = null;
 let ctx = null;
 let isDrawing = false;
+let hasDrawn = false;
 let socket = null;
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -92,6 +93,7 @@ function initializeCanvas() {
 
 function startDrawing(e) {
 	isDrawing = true;
+	hasDrawn = true;
 	const rect = canvas.getBoundingClientRect();
 	const x = (e.clientX - rect.left) * (canvas.width / rect.width);
 	const y = (e.clientY - rect.top) * (canvas.height / rect.height);
@@ -120,6 +122,8 @@ function draw(e) {
 	ctx.beginPath();
 	ctx.moveTo(x, y);
 
+	hasDrawn = true;
+
 	// Emit draw event to other users
 	if (socket) {
 		socket.emit("draw", {
@@ -140,7 +144,7 @@ function stopDrawing() {
 	}
 
 	// Emit end event to other users
-	if (socket) {
+	if (hasDrawn && socket) {
 		socket.emit("draw", {
 			slug: currentRoomSlug,
 			x: 0,
@@ -150,6 +154,7 @@ function stopDrawing() {
 			type: "end",
 		});
 	}
+	hasDrawn = false;
 }
 
 function drawFromRemote(data) {
