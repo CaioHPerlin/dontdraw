@@ -42,3 +42,8 @@ export { Prisma }
  * 
  */
 export type Room = Prisma.RoomModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
