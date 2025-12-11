@@ -1,0 +1,234 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+		sans-serif;
+	background: #0f1116;
+	color: #e0e0e0;
+	min-height: 100vh;
+	padding: 0;
+	overflow: hidden;
+}
+
+#app {
+	width: 100vw;
+	height: 100vh;
+}
+
+.section {
+	background: transparent;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+
+.section.hidden {
+	display: none;
+}
+
+/* Main Menu Styles */
+#main-menu {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.menu-container {
+	max-width: 500px;
+	width: 90%;
+	text-align: center;
+}
+
+.menu-container h1 {
+	color: #ffffff;
+	font-size: 4rem;
+	font-weight: 300;
+	margin-bottom: 12px;
+	letter-spacing: -2px;
+}
+
+.subtitle {
+	color: #8b8f99;
+	font-size: 1.1rem;
+	margin-bottom: 48px;
+	font-weight: 400;
+}
+
+.room-input-container {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 32px;
+}
+
+#room-input {
+	flex: 1;
+	padding: 16px 20px;
+	border: none;
+	background: #1a1d24;
+	color: #ffffff;
+	font-size: 16px;
+	outline: none;
+	transition: background 0.2s;
+}
+
+#room-input:focus {
+	background: #23262e;
+}
+
+#room-input::placeholder {
+	color: #525866;
+}
+
+button {
+	padding: 16px 32px;
+	background: #ffffff;
+	color: #0f1116;
+	border: none;
+	font-size: 16px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: opacity 0.2s;
+	white-space: nowrap;
+}
+
+button:hover {
+	opacity: 0.8;
+}
+
+button:active {
+	transform: scale(0.98);
+}
+
+.info {
+	color: #525866;
+	font-size: 0.9rem;
+}
+
+.info p {
+	margin-bottom: 8px;
+}
+
+.example {
+	margin-top: 16px;
+}
+
+.example span {
+	color: #8b8f99;
+	font-family: monospace;
+	background: #1a1d24;
+	padding: 4px 12px;
+	border-radius: 4px;
+}
+
+/* Canvas Section Styles */
+#canvas-section {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+.canvas-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 20px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+}
+
+.canvas-header h2 {
+	color: #ffffff;
+	font-size: 1.2rem;
+	font-weight: 400;
+}
+
+#leave-room-btn {
+	background: #1a1d24;
+	color: #ffffff;
+	padding: 8px 16px;
+}
+
+.canvas-container {
+	flex: 1;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+#drawing-canvas {
+	border: none;
+	cursor: crosshair;
+	background: #0f1116;
+	width: 100%;
+	height: 100%;
+}
+
+.canvas-controls {
+	display: flex;
+	gap: 15px;
+	align-items: center;
+	padding: 16px 20px;
+	background: transparent;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+}
+
+.canvas-controls label {
+	color: #8b8f99;
+	font-weight: 400;
+	font-size: 14px;
+}
+
+#color-picker {
+	width: 50px;
+	height: 40px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+}
+
+#brush-size {
+	width: 150px;
+	cursor: pointer;
+}
+
+#clear-canvas-btn {
+	background: #1a1d24;
+	color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.menu-container h1 {
+		font-size: 3rem;
+	}
+
+	.room-input-container {
+		flex-direction: column;
+	}
+
+	.canvas-header {
+		flex-direction: column;
+		gap: 15px;
+	}
+
+	.canvas-controls {
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	#brush-size {
+		width: 100%;
+	}
+}

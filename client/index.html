@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DontDraw</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Main Menu -->
+        <!-- <div id="main-menu" class="section">
+            <div class="menu-container">
+                <h1>DontDraw</h1>
+                <p class="subtitle">Collaborative drawing, simplified</p>
+
+                <div class="room-input-container">
+                    <input type="text" id="room-input" placeholder="enter a room name..." maxlength="50"
+                        autocomplete="off" />
+                    <button id="join-btn">Join Room</button>
+                </div>
+
+                <div class="info">
+                    <p>Type any room name and press enter to create or join</p>
+                    <p class="example">Example: <span>my-drawing-room</span></p>
+                </div>
+            </div>
+        </div> -->
+
+        <div id="canvas-section" class="section">
+            <div class="canvas-header">
+                <h2 id="current-room-name"></h2>
+                <button id="leave-room-btn">Leave</button>
+            </div>
+            <div class="canvas-container">
+                <canvas id="drawing-canvas"></canvas>
+            </div>
+            <div class="canvas-controls">
+                <button id="clear-canvas-btn">Clear</button>
+                <input type="color" id="color-picker" value="#ffffff">
+                <label for="brush-size">Size</label>
+                <input type="range" id="brush-size" min="1" max="20" value="3">
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
